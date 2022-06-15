@@ -70,11 +70,23 @@ def extract():
     return extracted_data
 
 def create_exchange_rate(data_path:str, currency:str):
+    """Function to create a dataframe with the data coming from the API.
+    
+    Input: Data in a csv format & currency to keep.
+
+    Output: variable containing a float for conversion.
+    """
     rate = pd.read_csv(data_path)
     exchange_rate = float(rate["rates"][rate["currency"] == currency].values)
     return exchange_rate
 
 def transform(data, exchange_rate:float, currency:str):
+    """Function of data transformation. Take the information coming the exchange rate to make a conversion.
+    
+    Input: Dataframe, value needed to the transformation & name of the currency.
+
+    Output: Dataframe with the currency changing.
+    """
     data["Market Cap (US$ Billion)"] = data["Market Cap (US$ Billion)"] * exchange_rate
     data.rename(columns={"Market Cap (US$ Billion)":f"Market Cap ({currency} Billion)"}, inplace=True)
     return data
